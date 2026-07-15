@@ -242,7 +242,8 @@ html[lang="ar"] .about__body .drop::first-letter { float: none; font-size: 1em; 
 /* ============================================================
    TIMELINE — roast curve + braided lanes + filters
    ============================================================ */
-.timeline { background: linear-gradient(180deg, var(--cream) 0%, var(--oat) 100%); }
+.timeline { background: linear-gradient(180deg, var(--cream) 0%, var(--oat) 100%); --tl-label: 150px; }
+@media (max-width: 680px) { .timeline { --tl-label: 96px; } }
 .tl__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; margin-bottom: 2.4rem; }
 
 .tl__filters { display: flex; gap: .6rem; flex-wrap: wrap; }
@@ -263,8 +264,9 @@ html[lang="ar"] .about__body .drop::first-letter { float: none; font-size: 1em; 
 .chip[aria-pressed="true"] { background: var(--espresso); color: var(--cream); border-color: var(--espresso); }
 .chip:hover { border-color: var(--copper); }
 
-/* The scroll-drawn roast curve */
-.roastcurve { position: relative; width: 100%; margin-bottom: .5rem; }
+/* The scroll-drawn roast curve — offset by the label column so its
+   time-axis aligns exactly with the lane bars and year axis below. */
+.roastcurve { position: relative; margin-inline-start: var(--tl-label); width: auto; margin-bottom: .5rem; }
 .roastcurve svg { width: 100%; height: auto; display: block; overflow: visible; }
 .roastcurve .curve-line { fill: none; stroke: var(--copper); stroke-width: 3; stroke-linecap: round; }
 .roastcurve .curve-fill { fill: url(#roastFill); opacity: .5; }
@@ -278,15 +280,14 @@ html[lang="ar"] .about__body .drop::first-letter { float: none; font-size: 1em; 
 .lane {
   position: relative;
   display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 1rem;
+  grid-template-columns: var(--tl-label) 1fr;
+  gap: 0;
   align-items: center;
   min-height: 64px;
   border-block-start: 1px dashed var(--line);
 }
 .lane:last-child { border-block-end: 1px dashed var(--line); }
-@media (max-width: 680px) { .lane { grid-template-columns: 96px 1fr; } }
-.lane__name { font-family: var(--sans); font-size: var(--step--1); font-weight: 600; letter-spacing: .02em; display: flex; align-items: center; gap: .5rem; }
+.lane__name { font-family: var(--sans); font-size: var(--step--1); font-weight: 600; letter-spacing: .02em; display: flex; align-items: center; gap: .5rem; padding-inline-end: 1rem; }
 .lane__name .swatch { width: 10px; height: 10px; border-radius: 3px; background: var(--c); flex: none; }
 .lane__track { position: relative; height: 100%; min-height: 64px; }
 
@@ -317,9 +318,11 @@ html[lang="ar"] .about__body .drop::first-letter { float: none; font-size: 1em; 
 .bar--present::after { content: "▸"; margin-inline-start: .35rem; opacity: .85; }
 .bar--point { min-width: 40px; }
 
-/* chart scroll region (swipeable on narrow screens) */
+/* chart scroll region (swipeable on narrow screens).
+   Force LTR so the curve/bars/years share one left-anchored plot area and
+   chronology reads left→right in both languages. */
 .tl__scroll { overflow: visible; }
-.tl__inner { width: 100%; }
+.tl__inner { width: 100%; direction: ltr; }
 .tl__swipe { display: none; text-align: center; font-size: var(--step--1); color: var(--text-soft); letter-spacing: .1em; margin-top: 1rem; opacity: .7; }
 @media (max-width: 680px) {
   .tl__scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; padding-bottom: .4rem; }
@@ -327,9 +330,8 @@ html[lang="ar"] .about__body .drop::first-letter { float: none; font-size: 1em; 
   .tl__swipe { display: block; }
 }
 
-/* year gridlines */
-.tl__years { position: relative; height: 26px; margin-top: .4rem; margin-inline-start: 150px; }
-@media (max-width: 680px) { .tl__years { margin-inline-start: 96px; } }
+/* year gridlines — same plot area as the curve and bars */
+.tl__years { position: relative; height: 26px; margin-top: .4rem; margin-inline-start: var(--tl-label); }
 .tl__year { position: absolute; transform: translateX(-50%); font-size: 11px; color: var(--text-soft); font-family: var(--sans); }
 html[dir="rtl"] .tl__year { transform: translateX(50%); }
 .tl__grid { position: absolute; inset-block: 0; width: 1px; background: var(--line); opacity: .5; }
