@@ -706,16 +706,32 @@ html[lang="ar"] .about__body .drop::first-letter {
 .bar--point {
   min-width: 40px;
 }
+/* let the label shrink and ellipsize inside a narrow bar instead of hard-clipping mid-letter */
+.bar__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* chart scroll region (swipeable on narrow screens).
    Force LTR so the curve/bars/years share one left-anchored plot area and
-   chronology reads left→right in both languages. */
+   chronology reads left→right in both languages. Also keeps scrollLeft
+   positive and left-anchored in Arabic (RTL) instead of flipping. */
+.tl__chart {
+  position: relative;
+}
 .tl__scroll {
   overflow: visible;
+  direction: ltr;
 }
 .tl__inner {
   width: 100%;
   direction: ltr;
+}
+/* right-edge "more →" gradient — mobile only, fades out at the far end */
+.tl__fade {
+  display: none;
 }
 .tl__swipe {
   display: none;
@@ -737,8 +753,76 @@ html[lang="ar"] .about__body .drop::first-letter {
   .tl__inner {
     min-width: 680px;
   }
-  .tl__swipe {
+  .tl__fade {
     display: block;
+    position: absolute;
+    inset-block: 0;
+    right: 0; /* physical: the force-LTR scroller always overflows to the right, both langs */
+    width: 48px;
+    pointer-events: none;
+    background: linear-gradient(to left, var(--bg), transparent);
+    transition: opacity 0.3s var(--ease);
+  }
+  .tl__chart.at-end .tl__fade {
+    opacity: 0;
+  }
+  .tl__swipe {
+    display: flex;
+    width: fit-content;
+    margin-inline: auto; /* centres the fit-content pill */
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--roast);
+    opacity: 1;
+    background: color-mix(in srgb, var(--copper) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--copper) 28%, transparent);
+    border-radius: 999px;
+    padding: 0.4rem 1rem;
+    letter-spacing: 0.06em;
+    transition:
+      opacity 0.4s var(--ease),
+      transform 0.4s var(--ease);
+  }
+  .tl__swipe.gone {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
+}
+.tl__swipe-arrow {
+  display: inline-block;
+  color: var(--copper);
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tl__swipe-arrow {
+    animation: tl-nudge 1.4s ease-in-out infinite;
+  }
+  .tl__swipe-arrow--r {
+    animation-name: tl-nudge-r;
+    animation-delay: 0.7s;
+  }
+  @keyframes tl-nudge {
+    0%,
+    100% {
+      transform: translateX(0);
+      opacity: 0.55;
+    }
+    50% {
+      transform: translateX(-4px);
+      opacity: 1;
+    }
+  }
+  @keyframes tl-nudge-r {
+    0%,
+    100% {
+      transform: translateX(0);
+      opacity: 0.55;
+    }
+    50% {
+      transform: translateX(4px);
+      opacity: 1;
+    }
   }
 }
 

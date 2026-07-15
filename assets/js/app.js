@@ -64,10 +64,22 @@
   function roleEnd(r) { return r.present ? NOW : toDec(r.end) + 1 / 12; }
   function isPoint(r) { return !r.present && r.start === r.end; }
 
+  // Non-linear time axis: squeeze the near-empty early years, expand the dense
+  // 2024→2027 cluster so recent role bars are wide enough to carry their labels.
+  // Piecewise-linear over [year, pct] stops — still monotonic left→right.
+  const AXIS_STOPS = [[2009, 0], [2020, 16], [2024, 38], [2027, 100]];
+  function axisPct(dec) {
+    const d = clamp(dec, AXIS_STOPS[0][0], AXIS_STOPS[AXIS_STOPS.length - 1][0]);
+    for (let i = 1; i < AXIS_STOPS.length; i++) {
+      const [y0, p0] = AXIS_STOPS[i - 1], [y1, p1] = AXIS_STOPS[i];
+      if (d <= y1 || i === AXIS_STOPS.length - 1) return p0 + (d - y0) / (y1 - y0) * (p1 - p0);
+    }
+    return 0;
+  }
+
   function renderTimeline() {
     const { startYear, endYear } = D.timeline;
-    const range = endYear - startYear;
-    const pctL = dec => ((dec - startYear) / range) * 100;
+    const pctL = axisPct;
 
     /* --- filter chips --- */
     const fWrap = $("#tlFilters");
@@ -107,7 +119,7 @@
       roles.forEach(r => {
         const s = toDec(r.start), e = roleEnd(r);
         const left = pctL(s);
-        const width = Math.max(((e - s) / range) * 100, 0);
+        const width = Math.max(pctL(e) - left, 0);
         const bar = el("button", "bar" + (r.present ? " bar--present" : "") + (isPoint(r) ? " bar--point" : ""));
         bar.style.left = left + "%";
         bar.style.width = width + "%";
@@ -117,7 +129,7 @@
         bar.style.background = `var(${track.var})`;
         bar.dataset.id = r.id;
         bar.dataset.track = r.track;
-        bar.innerHTML = `<span class="bar__dot"></span><span>${r.org}</span>`;
+        bar.innerHTML = `<span class="bar__dot"></span><span class="bar__label">${r.org}</span>`;
         bar.setAttribute("aria-label", r.org);
         bar.addEventListener("mouseenter", () => showDetail(r));
         bar.addEventListener("focus", () => showDetail(r));
@@ -128,14 +140,19 @@
       lanes.appendChild(lane);
     });
 
-    /* --- year axis --- */
+    /* --- year axis ---
+       Explicit ticks: sparse in the compressed early years (so labels don't
+       collide on the narrow mobile plot), denser through the expanded recent
+       cluster where the action is. */
     const yWrap = $("#tlYears");
     yWrap.style.direction = "ltr";
-    for (let y = startYear; y <= endYear; y += 3) {
+    const yearTicks = [2009, 2015, 2021, 2024, 2025, 2026, 2027]
+      .filter(y => y >= startYear && y <= endYear);
+    yearTicks.forEach(y => {
       const g = el("div", "tl__grid"); g.style.left = pctL(y) + "%";
       const lab = el("div", "tl__year", String(y)); lab.style.left = pctL(y) + "%";
       yWrap.appendChild(g); yWrap.appendChild(lab);
-    }
+    });
 
     /* --- reveal bars (staggered left→right, like the curve drawing) --- */
     const barsAll = () => [...lanes.querySelectorAll(".bar")];
@@ -202,7 +219,7 @@
     const fillD = d + ` L ${W} ${H} L 0 ${H} Z`;
 
     const dots = D.roles.map(r => {
-      const t = clamp((toDec(r.start) - D.timeline.startYear) / (D.timeline.endYear - D.timeline.startYear), 0, 1);
+      const t = clamp(pctL(toDec(r.start)) / 100, 0, 1); // same non-linear axis as the bars
       const trk = trackOf(r.track);
       return `<circle class="crack" data-track="${r.track}" data-t="${t.toFixed(3)}" cx="${(t * W).toFixed(1)}" cy="${curveY(t, H).toFixed(1)}" r="5" fill="var(${trk.var})"></circle>`;
     }).join("");
@@ -338,12 +355,30 @@
     });
   }
 
+  /* ---------- TIMELINE SCROLL CUES (mobile) ---------- */
+  // Fade the right-edge gradient near the end and retire the swipe hint once used.
+  function initTimelineScroll() {
+    const sc = $("#tlScroll");
+    if (!sc) return;
+    const chart = sc.closest(".tl__chart");
+    const swipe = $("#tlSwipe");
+    let swiped = false;
+    const onScroll = () => {
+      if (!swiped && sc.scrollLeft > 8) { swiped = true; if (swipe) swipe.classList.add("gone"); }
+      if (chart) chart.classList.toggle("at-end", sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 4);
+    };
+    onScroll();
+    sc.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+  }
+
   /* ---------- INIT ---------- */
   function init() {
     initLang();
     renderStats();
     renderAchievements();
     renderTimeline();
+    initTimelineScroll();
     renderOrigins();
     renderSkills();
     renderGallery();

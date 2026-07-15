@@ -247,22 +247,28 @@
           </div>
 
           <!-- chart region: horizontally swipeable on narrow screens -->
-          <div class="tl__scroll">
-            <div class="tl__inner">
-              <!-- roast curve svg is injected here -->
-              <div
-                class="roastcurve reveal"
-                data-delay="1"
-                id="roastCurve"
-              ></div>
-              <!-- braided lanes injected here -->
-              <div class="lanes" id="lanes"></div>
-              <div class="tl__years" id="tlYears"></div>
+          <div class="tl__chart">
+            <div class="tl__scroll" id="tlScroll">
+              <div class="tl__inner">
+                <!-- roast curve svg is injected here -->
+                <div
+                  class="roastcurve reveal"
+                  data-delay="1"
+                  id="roastCurve"
+                ></div>
+                <!-- braided lanes injected here -->
+                <div class="lanes" id="lanes"></div>
+                <div class="tl__years" id="tlYears"></div>
+              </div>
             </div>
+            <!-- mobile "more →" cue; fades out at the far end -->
+            <div class="tl__fade" aria-hidden="true"></div>
           </div>
-          <p class="tl__swipe" aria-hidden="true">
-            <span data-lang="en">← swipe the timeline →</span>
-            <span data-lang="ar">← اسحب المسار →</span>
+          <p class="tl__swipe" id="tlSwipe" aria-hidden="true">
+            <span class="tl__swipe-arrow">←</span>
+            <span data-lang="en">swipe the timeline</span
+            ><span data-lang="ar">اسحب المسار</span>
+            <span class="tl__swipe-arrow tl__swipe-arrow--r">→</span>
           </p>
 
           <!-- detail readout -->
