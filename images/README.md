@@ -1,4 +1,4 @@
-# Images — drop Saleh's real photos here
+# Images — drop Salih's real photos here
 
 The gallery currently uses elegant placeholders. To show real work:
 
@@ -13,7 +13,8 @@ The gallery currently uses elegant placeholders. To show real work:
 **Recommended:** compress to WebP/JPG under ~300 KB each, landscape or square,
 slightly desaturated to sit in the warm palette. The grid already lazy-loads them.
 
-## Suggested shots to gather from Saleh
+## Suggested shots to gather from Salih
+
 - Cup calligraphy (Coffee National Day) — he has 3 images
 - Wedding designs / Monarch.s art — 5 images referenced
 - Event catering (PIF Summer Event, Retal) — 8 images referenced

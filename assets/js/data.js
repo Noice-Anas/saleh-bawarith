@@ -1,12 +1,12 @@
 /* ============================================================
-   Saleh Bawarith — Portfolio data
+   Salih Bawarith — Portfolio data
    Single source of truth. Edit here to update the whole site.
    Dates are "YYYY-MM". end:null + present:true = ongoing role.
    ============================================================ */
 
 window.APP_DATA = {
   person: {
-    name_en: "Saleh Bawarith",
+    name_en: "Salih Bawarith",
     name_ar: "صالح باوارث",
     suffix: "OPMP",
     opmp_en: "Operations &amp; Performance Management",

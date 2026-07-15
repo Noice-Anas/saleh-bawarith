@@ -1,5 +1,5 @@
 /* ============================================================
-   Saleh Bawarith — app.js
+   Salih Bawarith — app.js
    Renders data-driven sections, drives the roast-curve timeline,
    language toggle, scroll reveals and ink-stroke animations.
    Dependency-free. Renders BOTH languages inline (data-lang spans)

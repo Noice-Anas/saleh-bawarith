@@ -1,15 +1,16 @@
-# Saleh Bawarith — Portfolio
+# Salih Bawarith — Portfolio
 
-A bilingual (English / Arabic) portfolio and career timeline for **Saleh Bawarith** —
+A bilingual (English / Arabic) portfolio and career timeline for **Salih Bawarith** —
 Riyadh-based Senior F&B Operations Manager, Specialty Coffee expert, and
 Heritage-Commission-licensed Arabic calligrapher.
 
-**Concept:** *"Warm Craft Editorial."* His career is told as a **roast curve** —
+**Concept:** _"Warm Craft Editorial."_ His career is told as a **roast curve** —
 a scroll-drawn profile with braided lanes underneath that show his many concurrent
 roles at a glance. Espresso/cream/copper palette, Fraunces + Arabic calligraphic
 display type, coffee-provenance "single-origin" identity cards.
 
 ## Tech
+
 Pure static site — **HTML + CSS + vanilla JS**, no build step, no dependencies.
 Works by opening `index.html` directly or via any static host.
 
@@ -23,14 +24,16 @@ images/               – drop real photos here (see images/README.md)
 ```
 
 ## Editing content
+
 Everything lives in **`assets/js/data.js`** — roles, stats, credentials, skills, origins.
 Each field has `_en` / `_ar` (or `en` / `ar`) variants. No HTML editing needed for content changes.
 
 ## Deploy to GitHub Pages
+
 1. Create a repo on GitHub and push this folder:
    ```bash
    git add .
-   git commit -m "Saleh Bawarith portfolio"
+   git commit -m "Salih Bawarith portfolio"
    git branch -M main
    git remote add origin https://github.com/<you>/<repo>.git
    git push -u origin main
@@ -40,10 +43,11 @@ Each field has `_en` / `_ar` (or `en` / `ar`) variants. No HTML editing needed f
 
 > For a custom domain or a `<you>.github.io` root site, name the repo `<you>.github.io`.
 
-## Still to add / review (with Saleh)
+## Still to add / review (with Salih)
+
 - **Review the narrative copy in `assets/js/data.js`.** Some blurbs and the
-  "origin notes" (e.g. *"a quiet discipline — the reverence for detail…"*) are
-  written *in Saleh's voice* but were drafted for the site, not quoted from him.
+  "origin notes" (e.g. _"a quiet discipline — the reverence for detail…"_) are
+  written _in Salih's voice_ but were drafted for the site, not quoted from him.
   Read them over and adjust to words he's comfortable publishing.
 - Real images (see `images/README.md`)
 - Contact email / phone (currently "available on request" + LinkedIn)
