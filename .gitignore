@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Verification / tooling artifacts (root-level screenshots only —
+# real gallery images under images/ are NOT ignored)
+.playwright-mcp/
+/[0-9][0-9]-*.jpeg
+/page-*.jpeg
+
+# Editor
+.vscode/
+.idea/
+
+# Private source material — raw LinkedIn scrape & strategy notes.
+# NOT for public hosting (would leak private notes on GitHub Pages).
+docs/
+
+# Internal request doc for Saleh — not part of the public site.
+REQUEST-FOR-SALEH.md
