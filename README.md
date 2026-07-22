@@ -18,10 +18,32 @@ Works by opening `index.html` directly or via any static host.
 index.html            – page structure (both languages inline)
 assets/css/style.css  – design system + all components
 assets/js/data.js     – ALL content (edit here to update the site)
-assets/js/app.js       – rendering, timeline, language toggle, animations
-images/               – drop real photos here (see images/README.md)
+assets/js/app.js       – rendering, timeline, language toggle, gallery, animations
+assets/gallery/       – optimized artwork: thumb/ (grid) + full/ (lightbox)
+assets/img/           – site images (Instagram QR code)
+assets/art-assets/    – raw full-res originals (git-ignored; local source only)
 .nojekyll             – tells GitHub Pages to serve files as-is
 ```
+
+## Contact form (one manual step)
+
+The contact form is wired to **Web3Forms** but ships **switched off**. To turn it on:
+
+1. Go to [web3forms.com](https://web3forms.com), enter **Artistasaleh@gmail.com**, and
+   verify it — you'll get an **Access Key**.
+2. Paste that key into `web3forms_key` at the top of **`assets/js/data.js`**
+   (in the `contact:` block). That's it — messages then land in the inbox.
+
+Until the key is filled in, the form politely tells visitors to email directly.
+Contact links (email, both phone numbers, WhatsApp Business, Instagram, LinkedIn)
+all work now and are edited in the same `contact:` block.
+
+## Updating the gallery
+
+Real artwork is listed in the `gallery:` block of `assets/js/data.js`. To add a
+piece: optimize it into `assets/gallery/thumb/<name>.jpg` and
+`assets/gallery/full/<name>.jpg`, then add a row (`file`, `cat`, `en`, `ar`).
+The grid, filters and lightbox update automatically.
 
 ## Editing content
 
@@ -49,8 +71,13 @@ Each field has `_en` / `_ar` (or `en` / `ar`) variants. No HTML editing needed f
   "origin notes" (e.g. _"a quiet discipline — the reverence for detail…"_) are
   written _in Salih's voice_ but were drafted for the site, not quoted from him.
   Read them over and adjust to words he's comfortable publishing.
-- Real images (see `images/README.md`)
-- Contact email / phone (currently "available on request" + LinkedIn)
+- **Turn the contact form on** — paste the Web3Forms key into `assets/js/data.js`
+  (see "Contact form" above). One-time, ~2 minutes.
+- ~~Real images~~ ✅ Added — 20 calligraphy pieces (cup lettering + on paper) in the gallery.
+- ~~Contact email / phone~~ ✅ Added — email, job-applications number, WhatsApp
+  Business, Instagram (with QR), LinkedIn.
+- More artwork if desired (weddings, paintings, logos, roastery, catering, 3D, a headshot)
+  to broaden the gallery beyond calligraphy.
 - Confirm the two unlisted roles (Takehara Landscape — the Japanese thread; PR & Protocol)
 - The revenue figures (250K→610K SAR / 35% / 15 lines) are shown **without brand
   attribution** per instruction, with a disclaimer note. Confirm they're cleared to publish.

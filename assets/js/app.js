@@ -288,26 +288,105 @@
     });
   }
 
-  /* ---------- GALLERY (placeholders + real-image slots) ---------- */
-  const GALLERY = [
-    { en: "Cup calligraphy", ar: "خطٌّ على الأكواب", cls: "tall", img: "" },
-    { en: "Wedding designs", ar: "تصاميم أعراس", cls: "", img: "" },
-    { en: "Logo &amp; brand work", ar: "شعارات وهويات", cls: "", img: "" },
-    { en: "Exhibition piece", ar: "عملٌ من معرض", cls: "wide", img: "" },
-    { en: "National Day live art", ar: "فنٌّ مباشر لليوم الوطني", cls: "", img: "" },
-    { en: "Roastery & coffee", ar: "التحميص والقهوة", cls: "tall", img: "" },
-    { en: "3D design", ar: "تصميم ثلاثي الأبعاد", cls: "", img: "" },
-    { en: "Event catering", ar: "ضيافة الفعاليات", cls: "", img: "" }
-  ];
+  /* ---------- GALLERY (real images + filter + lightbox) ---------- */
+  const THUMB = f => `assets/gallery/thumb/${f}.jpg`;
+  const FULL  = f => `assets/gallery/full/${f}.jpg`;
+  let lb = null; // lightbox state: { visible:[items], idx }
+
   function renderGallery() {
+    const G = D.gallery;
+    if (!G || !G.items.length) return;
     const g = $("#galleryGrid");
-    GALLERY.forEach(item => {
-      const tile = el("div", "gtile reveal " + item.cls);
-      tile.innerHTML = item.img
-        ? `<img src="${item.img}" alt="" loading="lazy">`
-        : `<div class="ph"><div class="mark">ص</div><small>${bi(item.en, item.ar)}</small></div>`;
+
+    /* filter chips */
+    const fWrap = $("#galFilters");
+    if (fWrap) {
+      G.filters.forEach((f, i) => {
+        const c = el("button", "chip", bi(f.en, f.ar));
+        c.setAttribute("aria-pressed", String(i === 0));
+        c.dataset.cat = f.id;
+        fWrap.appendChild(c);
+      });
+      fWrap.addEventListener("click", e => {
+        const chip = e.target.closest(".chip"); if (!chip) return;
+        const cat = chip.dataset.cat;
+        fWrap.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === chip)));
+        g.querySelectorAll(".gtile").forEach(t =>
+          t.classList.toggle("hide", cat !== "all" && t.dataset.cat !== cat));
+      });
+    }
+
+    /* tiles */
+    G.items.forEach((item, i) => {
+      const tile = el("button", "gtile reveal" + (item.feat ? " feat" : ""));
+      tile.dataset.cat = item.cat;
+      tile.dataset.idx = String(i);
+      tile.setAttribute("aria-label", stripTags(item.en));
+      tile.innerHTML =
+        `<img src="${THUMB(item.file)}" alt="${stripTags(item.en)}" loading="lazy" decoding="async">
+         <span class="gtile__cap">${bi(item.en, item.ar)}</span>`;
+      tile.addEventListener("click", () => openLightbox(i));
       g.appendChild(tile);
     });
+
+    initLightbox();
+  }
+  function stripTags(s) { return String(s).replace(/&amp;/g, "&"); }
+
+  /* --- lightbox --- */
+  function visibleItems() {
+    // walk only the currently-shown (filtered) tiles, in DOM order
+    return [...document.querySelectorAll("#galleryGrid .gtile:not(.hide)")]
+      .map(t => ({ tile: t, i: +t.dataset.idx, item: D.gallery.items[+t.dataset.idx] }));
+  }
+  function initLightbox() {
+    const box = $("#lightbox"); if (!box) return;
+    box.addEventListener("click", e => {
+      if (e.target.closest("[data-lb-close]") || e.target === box || e.target.classList.contains("lb__stage"))
+        closeLightbox();
+      else if (e.target.closest("[data-lb-prev]")) stepLightbox(-1);
+      else if (e.target.closest("[data-lb-next]")) stepLightbox(1);
+    });
+    document.addEventListener("keydown", e => {
+      if (!box.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowRight") stepLightbox(document.documentElement.dir === "rtl" ? -1 : 1);
+      else if (e.key === "ArrowLeft")  stepLightbox(document.documentElement.dir === "rtl" ? 1 : -1);
+    });
+  }
+  function openLightbox(idx) {
+    const box = $("#lightbox"); if (!box) return;
+    const vis = visibleItems();
+    const pos = vis.findIndex(v => v.i === idx);
+    lb = { vis, pos: pos < 0 ? 0 : pos };
+    paintLightbox();
+    box.classList.add("open");
+    box.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    const c = box.querySelector("[data-lb-close]"); if (c) c.focus();
+  }
+  function stepLightbox(dir) {
+    if (!lb) return;
+    lb.pos = (lb.pos + dir + lb.vis.length) % lb.vis.length;
+    paintLightbox();
+  }
+  function paintLightbox() {
+    const box = $("#lightbox"); if (!box || !lb) return;
+    const { item } = lb.vis[lb.pos];
+    const img = box.querySelector(".lb__img");
+    img.src = FULL(item.file);
+    img.alt = stripTags(item.en);
+    box.querySelector(".lb__cap").innerHTML = bi(item.en, item.ar);
+    box.querySelector(".lb__count").textContent = `${lb.pos + 1} / ${lb.vis.length}`;
+    const multi = lb.vis.length > 1;
+    box.querySelectorAll("[data-lb-prev],[data-lb-next]").forEach(b => b.style.display = multi ? "" : "none");
+  }
+  function closeLightbox() {
+    const box = $("#lightbox"); if (!box) return;
+    box.classList.remove("open");
+    box.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    lb = null;
   }
 
   /* ---------- CREDENTIALS ---------- */
@@ -325,6 +404,83 @@
     $("#eduBlock").innerHTML =
       `${bi("Education", "التعليم")}: <b>${bi(D.education.school_en, D.education.school_ar)}</b> —
        ${bi(D.education.degree_en, D.education.degree_ar)} · ${D.education.years}`;
+  }
+
+  /* ---------- CONTACT (links + form) ---------- */
+  function renderContact() {
+    const C = D.contact; if (!C) return;
+
+    // fill the direct-contact links from data (single source of truth)
+    const set = (sel, attr, val) => { const e = $(sel); if (e && val != null) e.setAttribute(attr, val); };
+    const txt = (sel, val) => { const e = $(sel); if (e && val != null) e.textContent = val; };
+
+    set("#cEmail", "href", "mailto:" + C.email);
+    txt("#cEmailVal", C.email);
+    set("#cJobs", "href", "tel:" + C.phone_jobs.tel);
+    txt("#cJobsVal", C.phone_jobs.display);
+    set("#cWa", "href", "https://wa.me/" + C.phone_business.whatsapp);
+    txt("#cWaVal", C.phone_business.display);
+    set("#cBizCall", "href", "tel:" + C.phone_business.tel);
+    set("#cIg", "href", C.instagram.url);
+    txt("#cIgVal", C.instagram.handle);
+    set("#cIgQr", "href", C.instagram.url);
+    const qr = $("#cIgQrImg"); if (qr) qr.src = C.instagram.qr;
+    set("#cLinkedin", "href", C.linkedin);
+
+    initContactForm(C);
+  }
+
+  function initContactForm(C) {
+    const form = $("#contactForm"); if (!form) return;
+    const status = $("#formStatus");
+    const key = (C.web3forms_key || "").trim();
+    const isConfigured = key.length > 10;
+
+    // stamp the access key + subject from data
+    const keyField = form.querySelector('input[name="access_key"]');
+    if (keyField) keyField.value = key;
+
+    const say = (msg_en, msg_ar, kind) => {
+      status.className = "form__status " + (kind || "");
+      status.innerHTML = bi(msg_en, msg_ar);
+    };
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      if (form.querySelector('input[name="botcheck"]').checked) return; // honeypot tripped
+
+      if (!isConfigured) {
+        say(`The form isn't switched on yet — please email <a href="mailto:${C.email}">${C.email}</a> directly.`,
+            `النموذج غير مُفعّلٍ بعد — يُرجى المراسلة مباشرةً على <a href="mailto:${C.email}">${C.email}</a>.`,
+            "err");
+        return;
+      }
+
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      say("Sending…", "جارٍ الإرسال…", "");
+
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form)
+        });
+        const data = await res.json();
+        if (data.success) {
+          form.reset();
+          say("Thanks — your message is on its way. Salih will reply soon.",
+              "شكراً — تم إرسال رسالتك. سيردّ عليك صالح قريباً.", "ok");
+        } else {
+          throw new Error(data.message || "failed");
+        }
+      } catch (err) {
+        say(`Something went wrong. Please email <a href="mailto:${C.email}">${C.email}</a> instead.`,
+            `حدث خطأ ما. يُرجى المراسلة على <a href="mailto:${C.email}">${C.email}</a> بدلاً من ذلك.`, "err");
+      } finally {
+        btn.disabled = false;
+      }
+    });
   }
 
   /* ---------- SCROLL REVEAL + HEADER ---------- */
@@ -383,6 +539,7 @@
     renderSkills();
     renderGallery();
     renderCreds();
+    renderContact();
     initReveal();
     initHeader();
     initSignature();

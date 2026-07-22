@@ -15,5 +15,13 @@
 # NOT for public hosting (would leak private notes on GitHub Pages).
 docs/
 
+# Raw, full-resolution artwork originals (~41MB). Kept locally as the
+# source of truth; the site serves optimized copies from assets/gallery/.
+# Not committed so the Pages repo stays lean.
+assets/art-assets/
+
 # Internal request doc for Salih — not part of the public site.
 REQUEST-FOR-SALIH.md
+
+# Private working notes / task list — not part of the public site.
+TODO.md

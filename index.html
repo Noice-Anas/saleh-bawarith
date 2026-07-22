@@ -29,7 +29,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="assets/css/style.css?v=2" />
+    <link rel="stylesheet" href="assets/css/style.css?v=3" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' fill='%23B87333'%3E%D8%B5%3C/text%3E%3C/svg%3E"
@@ -353,15 +353,28 @@
           </h2>
           <p class="section__lead reveal" data-delay="2">
             <span data-lang="en"
-              >Licensed Arabic calligraphy, live cup lettering, wedding designs,
-              logos and exhibition work — 60+ events over 17 years.</span
+              >Licensed Arabic calligraphy — live cup lettering at coffee events
+              and hand-lettered pieces on paper. Part of 60+ events over 17
+              years.</span
             >
             <span data-lang="ar"
-              >خطٌّ عربيٌّ مرخّص، وكتابةٌ مباشرة على الأكواب، وتصاميم أعراس،
-              وشعارات، وأعمال معارض — أكثر من ٦٠ فعالية خلال ١٧ عاماً.</span
+              >خطٌّ عربيٌّ مرخّص — كتابةٌ مباشرة على الأكواب في فعاليات القهوة،
+              وقطعٌ بخط اليد على الورق. جزءٌ من أكثر من ٦٠ فعالية خلال ١٧
+              عاماً.</span
             >
           </p>
+          <div
+            class="gal__filters reveal"
+            data-delay="2"
+            id="galFilters"
+            role="group"
+            aria-label="Filter artwork"
+          ></div>
           <div class="gallery__grid" id="galleryGrid"></div>
+          <p class="gal__hint reveal">
+            <span data-lang="en">Tap any piece to view it full-size.</span>
+            <span data-lang="ar">انقر أي قطعة لعرضها بالحجم الكامل.</span>
+          </p>
         </div>
       </section>
 
@@ -402,31 +415,177 @@
               بعين حِرفيّ، فلنتحدث.</span
             >
           </p>
-          <div class="contact__actions reveal" data-delay="2">
-            <a
-              href="https://www.linkedin.com/in/saleh-bawarith/"
-              target="_blank"
-              rel="noopener"
-              class="btn btn--primary"
+
+          <div class="contact__grid">
+            <!-- ---- message form ---- -->
+            <form
+              class="cform reveal"
+              id="contactForm"
+              data-delay="1"
+              novalidate
             >
-              <span data-lang="en">Connect on LinkedIn</span
-              ><span data-lang="ar">تواصل عبر لينكدإن</span>
-            </a>
-            <!-- Add real email/phone here when available -->
-            <a href="#top" class="btn btn--ghost">
-              <span data-lang="en">Back to top</span
-              ><span data-lang="ar">إلى الأعلى</span>
-            </a>
+              <p class="cform__title">
+                <span data-lang="en">Send a message</span
+                ><span data-lang="ar">أرسل رسالة</span>
+              </p>
+              <!-- Web3Forms fields; access_key is injected from data.js -->
+              <input type="hidden" name="access_key" value="" />
+              <input
+                type="hidden"
+                name="subject"
+                value="New message from salehbawarith.com"
+              />
+              <input type="hidden" name="from_name" value="Salih Bawarith Site" />
+              <!-- honeypot: hidden from humans, catches bots -->
+              <input
+                type="checkbox"
+                name="botcheck"
+                class="cform__hp"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+              />
+
+              <label class="cform__field">
+                <span data-lang="en">Your name</span
+                ><span data-lang="ar">اسمك</span>
+                <input type="text" name="name" required autocomplete="name" />
+              </label>
+              <label class="cform__field">
+                <span data-lang="en">Your email</span
+                ><span data-lang="ar">بريدك الإلكتروني</span>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  dir="ltr"
+                />
+              </label>
+              <label class="cform__field">
+                <span data-lang="en">Message</span
+                ><span data-lang="ar">الرسالة</span>
+                <textarea name="message" rows="4" required></textarea>
+              </label>
+              <button type="submit" class="btn btn--primary cform__submit">
+                <span data-lang="en">Send message</span
+                ><span data-lang="ar">إرسال الرسالة</span>
+              </button>
+              <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+            </form>
+
+            <!-- ---- direct channels ---- -->
+            <div class="cmethods reveal" data-delay="2">
+              <p class="cform__title">
+                <span data-lang="en">Or reach out directly</span
+                ><span data-lang="ar">أو تواصل مباشرةً</span>
+              </p>
+
+              <a class="cmethod" id="cEmail" href="#">
+                <span class="cmethod__ico" aria-hidden="true">✉</span>
+                <span class="cmethod__body">
+                  <span class="cmethod__k"
+                    ><span data-lang="en">Email</span
+                    ><span data-lang="ar">البريد الإلكتروني</span></span
+                  >
+                  <span class="cmethod__v" id="cEmailVal" dir="ltr"></span>
+                </span>
+              </a>
+
+              <a class="cmethod" id="cJobs" href="#">
+                <span class="cmethod__ico" aria-hidden="true">☎</span>
+                <span class="cmethod__body">
+                  <span class="cmethod__k"
+                    ><span data-lang="en">Job applications</span
+                    ><span data-lang="ar">طلبات التوظيف</span></span
+                  >
+                  <span class="cmethod__v" id="cJobsVal" dir="ltr"></span>
+                </span>
+              </a>
+
+              <a
+                class="cmethod"
+                id="cWa"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="cmethod__ico cmethod__ico--wa" aria-hidden="true"
+                  >WA</span
+                >
+                <span class="cmethod__body">
+                  <span class="cmethod__k"
+                    ><span data-lang="en">WhatsApp Business</span
+                    ><span data-lang="ar">واتساب للأعمال</span></span
+                  >
+                  <span class="cmethod__v" id="cWaVal" dir="ltr"></span>
+                  <span class="cmethod__note"
+                    ><span data-lang="en"
+                      >Roasting, events &amp; other inquiries</span
+                    ><span data-lang="ar"
+                      >التحميص والفعاليات والاستفسارات الأخرى</span
+                    ></span
+                  >
+                </span>
+              </a>
+
+              <div class="cmethod cmethod--ig">
+                <a
+                  class="cig__qr"
+                  id="cIgQr"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Instagram QR code"
+                >
+                  <img id="cIgQrImg" src="" alt="Scan for Instagram @monarch.s" />
+                </a>
+                <span class="cmethod__body">
+                  <span class="cmethod__k"
+                    ><span data-lang="en">Instagram</span
+                    ><span data-lang="ar">إنستغرام</span></span
+                  >
+                  <a
+                    class="cmethod__v"
+                    id="cIg"
+                    href="#"
+                    target="_blank"
+                    rel="noopener"
+                    dir="ltr"
+                    ><span id="cIgVal"></span
+                  ></a>
+                  <span class="cmethod__note"
+                    ><span data-lang="en">Scan or tap to follow the artwork</span
+                    ><span data-lang="ar">امسح أو انقر لمتابعة الأعمال</span></span
+                  >
+                </span>
+              </div>
+
+              <a
+                class="cmethod"
+                id="cLinkedin"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="cmethod__ico" aria-hidden="true">in</span>
+                <span class="cmethod__body">
+                  <span class="cmethod__k"
+                    ><span data-lang="en">LinkedIn</span
+                    ><span data-lang="ar">لينكدإن</span></span
+                  >
+                  <span class="cmethod__v"
+                    ><span data-lang="en">Connect professionally</span
+                    ><span data-lang="ar">تواصل مهنياً</span></span
+                  >
+                </span>
+              </a>
+            </div>
           </div>
+
           <p class="contact__note">
-            <span data-lang="en"
-              >Email &amp; phone available on request · Riyadh · Remote or
-              on-site</span
-            >
-            <span data-lang="ar"
-              >البريد والهاتف متاحان عند الطلب · الرياض · عن بُعد أو
-              حضورياً</span
-            >
+            <span data-lang="en">Riyadh · Remote or on-site</span>
+            <span data-lang="ar">الرياض · عن بُعد أو حضورياً</span>
           </p>
         </div>
       </section>
@@ -444,7 +603,36 @@
       </p>
     </footer>
 
-    <script src="assets/js/data.js?v=2"></script>
-    <script src="assets/js/app.js?v=2"></script>
+    <!-- ============ LIGHTBOX ============ -->
+    <div
+      class="lightbox"
+      id="lightbox"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Artwork viewer"
+    >
+      <button class="lb__btn lb__close" data-lb-close aria-label="Close">
+        ×
+      </button>
+      <button class="lb__btn lb__nav lb__prev" data-lb-prev aria-label="Previous">
+        ‹
+      </button>
+      <div class="lb__stage">
+        <figure class="lb__figure">
+          <img class="lb__img" src="" alt="" />
+          <figcaption class="lb__meta">
+            <span class="lb__cap"></span>
+            <span class="lb__count"></span>
+          </figcaption>
+        </figure>
+      </div>
+      <button class="lb__btn lb__nav lb__next" data-lb-next aria-label="Next">
+        ›
+      </button>
+    </div>
+
+    <script src="assets/js/data.js?v=3"></script>
+    <script src="assets/js/app.js?v=3"></script>
   </body>
 </html>

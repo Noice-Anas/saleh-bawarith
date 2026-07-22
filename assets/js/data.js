@@ -17,6 +17,58 @@ window.APP_DATA = {
     linkedin: "https://www.linkedin.com/in/saleh-bawarith/"
   },
 
+  /* ---------- Contact ----------
+     Edit these to update every contact link on the site.
+     web3forms_key: paste the Access Key from https://web3forms.com
+     (verify Artistasaleh@gmail.com there) to switch the contact form ON.
+     Until it's filled in, the form politely points visitors to the email. */
+  contact: {
+    web3forms_key: "",
+    email: "Artistasaleh@gmail.com",
+    phone_jobs:     { display: "+966 54 157 3596", tel: "+966541573596" },
+    phone_business: { display: "+966 59 694 6611", tel: "+966596946611", whatsapp: "966596946611" },
+    instagram: {
+      handle: "@monarch.s",
+      url: "https://www.instagram.com/monarch.s?igsh=MTdzcjNlZ3pqZXozcg%3D%3D&utm_source=qr",
+      qr: "assets/img/monarch-instagram-qr.png"
+    },
+    linkedin: "https://www.linkedin.com/in/saleh-bawarith/"
+  },
+
+  /* ---------- Gallery ----------
+     Real artwork. Files live in assets/gallery/thumb/<file>.jpg (grid)
+     and assets/gallery/full/<file>.jpg (lightbox). Add a row to feature
+     more work; the grid, filters and lightbox update automatically. */
+  gallery: {
+    filters: [
+      { id: "all",   en: "All",                ar: "الكل" },
+      { id: "cup",   en: "Cup calligraphy",    ar: "خطّ على الأكواب" },
+      { id: "paper", en: "On paper",           ar: "على الورق" }
+    ],
+    items: [
+      { file: "cup-01", cat: "cup",   feat: true, en: "Live cup calligraphy at a coffee event", ar: "خطٌّ مباشر على الأكواب في فعالية قهوة" },
+      { file: "cup-02", cat: "cup",   en: "Hand-lettering a cup, National Day",       ar: "كتابةٌ يدويةٌ على كوب، اليوم الوطني" },
+      { file: "cup-03", cat: "cup",   en: "White script on a navy coffee cup",        ar: "خطٌّ أبيض على كوبٍ كحلي" },
+      { file: "cup-04", cat: "cup",   en: "Arabic lettering, café collaboration",     ar: "خطٌّ عربي، تعاون مع مقهى" },
+      { file: "cup-05", cat: "cup",   en: "Freehand cup calligraphy",                 ar: "خطٌّ حرٌّ على الكوب" },
+      { file: "cup-06", cat: "cup",   feat: true, en: "White ink on a navy cup",      ar: "حبرٌ أبيض على كوبٍ كحلي" },
+      { file: "art-01", cat: "paper", en: "Hand-lettered Arabic calligraphy",         ar: "خطٌّ عربيٌّ بخط اليد" },
+      { file: "art-02", cat: "paper", en: "Ink calligraphy on card",                  ar: "خطٌّ حبريٌّ على بطاقة" },
+      { file: "art-03", cat: "paper", en: "Freehand Arabic script",                   ar: "خطٌّ عربيٌّ حرّ" },
+      { file: "art-04", cat: "paper", en: "Dedication in flowing script",             ar: "إهداءٌ بخطٍّ منساب" },
+      { file: "art-05", cat: "paper", en: "Minimal Arabic calligraphy",               ar: "خطٌّ عربيٌّ مختزل" },
+      { file: "art-06", cat: "paper", feat: true, en: "Composition in black ink",     ar: "تكوينٌ بالحبر الأسود" },
+      { file: "art-07", cat: "paper", en: "Hand-lettered lines",                      ar: "أسطرٌ بخط اليد" },
+      { file: "art-08", cat: "paper", en: "Ceremonial address, hand-lettered",        ar: "خطابٌ تشريفيٌّ بخط اليد" },
+      { file: "art-09", cat: "paper", en: "Arabic calligraphy on cream card",         ar: "خطٌّ عربيٌّ على بطاقةٍ كريمية" },
+      { file: "art-10", cat: "paper", en: "Layered calligraphic lines",               ar: "أسطرٌ خطّيةٌ متراكبة" },
+      { file: "art-11", cat: "paper", en: "Hand-lettered dedication",                 ar: "إهداءٌ بخط اليد" },
+      { file: "art-12", cat: "paper", en: "Fine-line Arabic script",                  ar: "خطٌّ عربيٌّ رفيع" },
+      { file: "art-13", cat: "paper", en: "Calligraphy study",                        ar: "دراسةٌ خطّية" },
+      { file: "art-14", cat: "paper", en: "Formal Arabic calligraphy",                ar: "خطٌّ عربيٌّ رسمي" }
+    ]
+  },
+
   // Career range used to position everything on the timeline axis.
   timeline: { startYear: 2009, endYear: 2027 },
 
