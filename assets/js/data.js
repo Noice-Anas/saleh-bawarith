@@ -23,7 +23,7 @@ window.APP_DATA = {
      (verify Artistasaleh@gmail.com there) to switch the contact form ON.
      Until it's filled in, the form politely points visitors to the email. */
   contact: {
-    web3forms_key: "",
+    web3forms_key: "01592966-9a4b-4a91-ab11-f8ee8b896e44",
     email: "Artistasaleh@gmail.com",
     phone_jobs:     { display: "+966 54 157 3596", tel: "+966541573596" },
     phone_business: { display: "+966 59 694 6611", tel: "+966596946611", whatsapp: "966596946611" },
